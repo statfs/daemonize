@@ -161,17 +161,22 @@ class Daemonize(object):
             # We will continue with syslog initialization only if actually have such capabilities
             # on the machine we are running this.
             if os.path.exists(syslog_address):
-                syslog = handlers.SysLogHandler(syslog_address)
-                if self.verbose:
-                    syslog.setLevel(logging.DEBUG)
-                else:
-                    syslog.setLevel(logging.INFO)
-                # Try to mimic to normal syslog messages.
-                formatter = logging.Formatter("%(asctime)s %(name)s: %(message)s",
-                                              "%b %e %H:%M:%S")
-                syslog.setFormatter(formatter)
+                try:
+                    syslog = handlers.SysLogHandler(syslog_address)
+                    if self.verbose:
+                        syslog.setLevel(logging.DEBUG)
+                    else:
+                        syslog.setLevel(logging.INFO)
+                    # Try to mimic to normal syslog messages.
+                    formatter = logging.Formatter("%(asctime)s %(name)s: %(message)s",
+                                                  "%b %e %H:%M:%S")
+                    syslog.setFormatter(formatter)
 
-                self.logger.addHandler(syslog)
+                    self.logger.addHandler(syslog)
+                except Exception, e:
+                   print("syslog service may not work, please check and start syslog-ng or specified custom logger in Daemonize", str(e)) 
+                   pass
+
 
         # Set umask to default to safe file permissions when running as a root daemon. 027 is an
         # octal number which we are typing as 0o27 for Python3 compatibility.
