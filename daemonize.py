@@ -174,7 +174,7 @@ class Daemonize(object):
 
                     self.logger.addHandler(syslog)
                 except Exception, e:
-                   print("syslog service may not work, please check and start syslog-ng or specified custom logger in Daemonize", str(e)) 
+                   print("syslog service may not work, please check and start syslog daemons(such as syslog-ng), or specified custom logger in Daemonize", str(e)) 
                    pass
 
 
